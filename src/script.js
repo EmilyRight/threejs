@@ -2,6 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as dat from 'dat.gui';
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js';
 
 /**
  * Base
@@ -528,12 +529,23 @@ doorLight.position.set(0, 1.8, 2.257);
 
 house.add(doorLamp, doorLight);
 
-const innerLight = new THREE.PointLight('#45b558', 10, 7);
+const innerLight = new THREE.PointLight('#fa3002', 10, 7);
+
 innerLight.position.set(0, 0.54, 0);
-gui.add(innerLight.position, 'x').min(0).max(7).step(0.01);
-gui.add(innerLight.position, 'z').min(0).max(7).step(0.01);
-gui.add(innerLight.position, 'y').min(0).max(7).step(0.01);
-house.add(innerLight);
+
+const width = 1;
+const height = 1;
+const intensity = 10;
+const innerLight2 = new THREE.RectAreaLight( '#fa3002', intensity,  width, height );
+innerLight2.position.set( 0.13, 1.65, 0.42);
+innerLight2.lookAt( 0, 0, 0 );
+
+const rectLightHelper = new RectAreaLightHelper( innerLight2 );
+innerLight2.add( rectLightHelper );
+gui.add(innerLight2.position, 'x').min(-7).max(7).step(0.01);
+gui.add(innerLight2.position, 'y').min(-7).max(7).step(0.01);
+gui.add(innerLight2.position, 'z').min(-7).max(7).step(0.01);
+house.add(innerLight, innerLight2);
 //windows
 const windowFrontLeft = new THREE.Group();
 
